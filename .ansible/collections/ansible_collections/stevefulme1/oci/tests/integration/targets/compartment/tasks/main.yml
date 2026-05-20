@@ -1,0 +1,114 @@
+---
+# Integration tests for stevefulme1.oci.compartment
+# These tests verify full CRUD lifecycle with idempotency and check_mode.
+# A live API endpoint is required.
+- name: Set test variables
+  ansible.builtin.set_fact:
+    test_compartment_params:
+      state: present
+# ============================================================
+# CREATE - check mode
+# ============================================================
+- name: Create compartment (check mode)  # noqa: args[module]
+  stevefulme1.oci.compartment:
+    state: present
+  args: "{{ test_compartment_params }}"
+  check_mode: true
+  register: create_check
+- name: Assert create in check mode reports changed
+  ansible.builtin.assert:
+    that:
+      - create_check is changed
+    fail_msg: "Create in check mode should report changed=true"
+# ============================================================
+# CREATE - real
+# ============================================================
+- name: Create compartment  # noqa: args[module]
+  stevefulme1.oci.compartment:
+    state: present
+  args: "{{ test_compartment_params }}"
+  register: create_result
+- name: Assert create reports changed
+  ansible.builtin.assert:
+    that:
+      - create_result is changed
+    fail_msg: "Create should report changed=true"
+- name: Record created resource identifier
+  ansible.builtin.set_fact:
+    created_id: "{{ create_result.id }}"
+# ============================================================
+# CREATE - idempotency
+# ============================================================
+- name: Create compartment again (idempotency)  # noqa: args[module]
+  stevefulme1.oci.compartment:
+    state: present
+  args: "{{ test_compartment_params }}"
+  register: create_idempotent
+- name: Assert create is idempotent
+  ansible.builtin.assert:
+    that:
+      - create_idempotent is not changed
+    fail_msg: "Repeated create with same params should report changed=false"
+# ============================================================
+# READ - verify created resource
+# ============================================================
+- name: Get compartment info  # noqa: args[module]
+  stevefulme1.oci.compartment_info:
+    id: "{{ created_id }}"
+  register: info_result
+- name: Assert resource exists
+  ansible.builtin.assert:
+    that:
+      - info_result.compartments | length == 1
+    fail_msg: "Created resource does not match expected values"
+# ============================================================
+# UPDATE
+# ============================================================
+# No optional string parameters available for update testing.
+# ============================================================
+# DELETE - check mode
+# ============================================================
+- name: Delete compartment (check mode)  # noqa: args[module]
+  stevefulme1.oci.compartment:
+    id: "{{ created_id }}"
+    state: absent
+  check_mode: true
+  register: delete_check
+- name: Assert delete in check mode reports changed
+  ansible.builtin.assert:
+    that:
+      - delete_check is changed
+    fail_msg: "Delete in check mode should report changed=true"
+- name: Verify compartment still exists after check mode delete  # noqa: args[module]
+  stevefulme1.oci.compartment_info:
+    id: "{{ created_id }}"
+  register: delete_check_verify
+- name: Assert resource still exists after check mode delete
+  ansible.builtin.assert:
+    that:
+      - delete_check_verify.compartments | length == 1
+    fail_msg: "Resource should still exist after check mode delete"
+# ============================================================
+# DELETE - real
+# ============================================================
+- name: Delete compartment  # noqa: args[module]
+  stevefulme1.oci.compartment:
+    id: "{{ created_id }}"
+    state: absent
+  register: delete_result
+- name: Assert delete reports changed
+  ansible.builtin.assert:
+    that:
+      - delete_result is changed
+    fail_msg: "Delete should report changed=true"
+# DELETE - idempotency
+- name: Delete compartment again (idempotency)  # noqa: args[module]
+  stevefulme1.oci.compartment:
+    id: "{{ created_id }}"
+    state: absent
+  register: delete_idempotent
+- name: Assert delete is idempotent
+  ansible.builtin.assert:
+    that:
+      - delete_idempotent is not changed
+    fail_msg: "Repeated delete should report changed=false"

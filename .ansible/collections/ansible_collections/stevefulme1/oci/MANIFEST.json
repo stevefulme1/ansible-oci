@@ -1,0 +1,34 @@
+{
+ "collection_info": {
+  "namespace": "stevefulme1",
+  "name": "oci",
+  "version": "0.1.0",
+  "authors": [
+   "Steve Fulmer (@stevefulme1)"
+  ],
+  "readme": "README.md",
+  "tags": [
+   "oracle",
+   "cloud",
+   "infrastructure"
+  ],
+  "description": "Ansible collection for the Oracle Cloud Infrastructure API",
+  "license": [
+   "GPL-3.0-or-later"
+  ],
+  "license_file": null,
+  "dependencies": {},
+  "repository": "https://github.com/stevefulme1/ansible-oci",
+  "documentation": null,
+  "homepage": null,
+  "issues": null
+ },
+ "file_manifest_file": {
+  "name": "FILES.json",
+  "ftype": "file",
+  "chksum_type": "sha256",
+  "chksum_sha256": "6e2fe708f9a11420e86e6c9cdedd1fecbc7ac5f47ae0de6c8c92adce82f7f3bc",
+  "format": 1
+ },
+ "format": 1
+}
