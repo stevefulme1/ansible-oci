@@ -9,6 +9,8 @@ description: Ansible collection for the Oracle Cloud Infrastructure API
 license:
   - GPL-3.0-or-later
 tags:
+  - cloud
+  - infrastructure
   - oracle
   - cloud
   - infrastructure
