@@ -1,0 +1,19 @@
+---
+namespace: stevefulme1
+name: oci
+version: 0.1.0
+readme: README.md
+authors:
+  - Steve Fulmer (@stevefulme1)
+description: Ansible collection for the Oracle Cloud Infrastructure API
+license:
+  - GPL-3.0-or-later
+tags:
+  - oracle
+  - cloud
+  - infrastructure
+repository: https://github.com/stevefulme1/ansible-oci
+build_ignore:
+  - tests/output
+  - .tox
+  - .venv
